@@ -59,7 +59,10 @@ public class ObjectScaler : MonoBehaviour
 			if(objectList[i].target == target)
 			{
 				objectList.RemoveAt(i);
-				instance.iterator--;
+				if (instance != null)
+				{
+					instance.iterator--;
+				}
 				return;
 			}
 		}
@@ -74,13 +77,21 @@ public class ObjectScaler : MonoBehaviour
 			Data current = objectList[iterator];
 			if (!current.finished)
 			{
-				float sign = Mathf.Sign(current.targetScale - current.currentScale);
-				current.currentScale = Utilities.SignClamp(current.currentScale + sign * Time.deltaTime * current.speed, sign, current.targetScale, current.targetScale);
-				current.target.localScale = current.baseScale * current.currentScale;
-				if (current.currentScale == current.targetScale)
+				if (current.target != null)
 				{
-					current.finished = true;
-					current.onComplete?.Invoke();
+					float sign = Mathf.Sign(current.targetScale - current.currentScale);
+					current.currentScale = Utilities.SignClamp(current.currentScale + sign * Time.deltaTime * current.speed, sign, current.targetScale, current.targetScale);
+					current.target.localScale = current.baseScale * current.currentScale;
+					if (current.currentScale == current.targetScale)
+					{
+						current.finished = true;
+						current.onComplete?.Invoke();
+					}
+				}
+				else
+				{
+					objectList.RemoveAt(iterator);
+					iterator--;
 				}
 			}
 		}

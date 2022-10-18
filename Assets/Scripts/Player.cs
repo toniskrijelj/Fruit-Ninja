@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 		OnMiss?.Invoke(misses);
 		if(misses == 3)
 		{
-			SceneManager.LoadScene(1);
+			SceneLoader.Instance.LoadScene("MainMenu");
 		}
 	}
 }

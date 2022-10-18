@@ -19,8 +19,8 @@ public class GameAssets : MonoBehaviour
 	}
 
 	public Blade blade;
-	public BubblesEffect bigBubbles;
-	public BubblesEffect smallBubbles;
+	public BubbleEffects bigBubbles;
+	public BubbleEffects smallBubbles;
 	public ParticleSystem cut;
 	public ParticleSystem splash;
 	public ParticleSystem forwardSplash;
@@ -30,4 +30,7 @@ public class GameAssets : MonoBehaviour
 	public AudioClip splashSound3;
 	public TMP_FontAsset xBlue;
 	public TMP_FontAsset xRed;
+	public ComboText comboText;
+	public TMP_FontAsset[] comboFonts;
+	public CriticalText criticalText;
 }

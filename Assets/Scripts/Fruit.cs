@@ -3,45 +3,69 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
-public class Fruit : MonoBehaviour
+[Serializable]
+public class FruitData
 {
-	public static event Action OnSliced;
+	[SerializeField] private FruitType fruit = FruitType.Watermelon;
+	[SerializeField] private Color colorInside = new Color(1, 1, 1, 1);
 
-	[SerializeField] private CuttedFruit cuttedPrefab = null;
-	[SerializeField] private UnityEvent OnCutUnity = null;
-	public Action OnCut { private get; set; }
-
-	[SerializeField] private Rigidbody2D rb = null;
-
-	public void Cut(float velocity, float cutRotation)
+	public FruitType Type()
 	{
-		OnCut?.Invoke();
-		OnCutUnity?.Invoke();
+		return fruit;
+	}
 
-		SpawnCuttedFruit(velocity, cutRotation);
-		PlayEffects(velocity, cutRotation);
+	public Color Color()
+	{
+		return colorInside;
+	}
+}
 
-		OnSliced?.Invoke();
+public class Fruit : BaseFruit
+{
+	public static List<Fruit> Instances = new List<Fruit>();
 
+	public static event Action<FruitData, SlicedFruit, float, float> OnFruitSliced;
+	public static event Action<FruitData, SlicedFruit, float, float> OnFruitCritical;
+
+	public static float criticalChance = 15f;
+
+	[SerializeField] private FruitData data = null;
+
+	private void Awake()
+	{
+		Instances.Add(this);
+	}
+
+	public override void Slice(float velocity, float cutRotation)
+	{
+		bool critical = Random.Range(1f, 100f) <= criticalChance;
+		SlicedFruit sliced = null;
+		if (slicedPrefab != null)
+		{
+			sliced = SlicedFruit.Spawn(slicedPrefab, transform.position, velocity, cutRotation, critical);
+		}
+		onSliced?.Invoke();
+		if(critical)
+		{
+			OnFruitCritical?.Invoke(data, sliced, velocity, cutRotation);
+		}
+		else
+		{
+			OnFruitSliced?.Invoke(data, sliced, velocity, cutRotation);
+		}
 		Destroy(gameObject);
 	}
 
-	private void SpawnCuttedFruit(float velocity, float cutRotation)
+	private void OnDestroy()
 	{
-		CuttedFruit.Spawn(cuttedPrefab, transform.position, cutRotation, velocity);
+		Instances.Remove(this);
 	}
 
-	private void PlayEffects(float velocity, float rotation)
+	public FruitData Data()
 	{
-		BubblesEffect.Create(transform.position, rotation, Color.red);
-		CutEffect.Create(transform.position, rotation);
-		SplashEffect.Create(transform.position, rotation, velocity, Color.red);
-		AudioManager.PlayRandomSplash();
+		return data;
 	}
 
-	public Rigidbody2D GetRigidbody()
-	{
-		return rb;
-	}
 }

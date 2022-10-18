@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
+	public const int POINTS_PER_FRUIT = 1;
+	public const int POINTS_PER_CRITICAL = 10;
+
 	public int score { get; private set; } = 0;
 	public int highscore { get; private set; } = 0;
 
@@ -21,10 +24,17 @@ public class Score : MonoBehaviour
 
 	private float originalIconSize;
 
+	string modeName;
+	string highscoreString;
+	string scoreString;
+
 	private void Awake()
 	{
 		Instance = this;
-		highscore = PlayerPrefs.GetInt("highscore", 0);
+		modeName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+		highscoreString = modeName + "Highscore";
+		scoreString = modeName + "Score";
+		highscore = PlayerPrefs.GetInt(highscoreString, 0);
 		scoreText = transform.Find("score").GetComponent<TextMeshProUGUI>();
 		highscoreText = transform.Find("highscore").GetComponent<TextMeshProUGUI>();
 		icon = transform.Find("icon").GetComponent<Image>();
@@ -35,33 +45,49 @@ public class Score : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		PlayerPrefs.SetInt("highscore", highscore);
+		PlayerPrefs.SetInt(highscoreString, highscore);
 	}
 
 	private void OnEnable()
 	{
-		Fruit.OnSliced += Fruit_OnSliced;
+		Fruit.OnFruitSliced += Fruit_OnSliced;
+		Fruit.OnFruitCritical += Fruit_OnFruitCritical;
 	}
 
 	private void OnDisable()
 	{
-		Fruit.OnSliced -= Fruit_OnSliced;
+		Fruit.OnFruitSliced -= Fruit_OnSliced;
+		Fruit.OnFruitCritical -= Fruit_OnFruitCritical;
 	}
 
-	private void Fruit_OnSliced()
+	private void Fruit_OnSliced(FruitData fruit, SlicedFruit sliced, float velocity, float rotation)
 	{
-		score += 1;
+		AddPoints(POINTS_PER_FRUIT);
+	}
+
+	private void Fruit_OnFruitCritical(FruitData fruit, SlicedFruit sliced, float velocity, float rotation)
+	{
+		AddPoints(POINTS_PER_CRITICAL);
+	}
+
+	public void AddPoints(int points)
+	{
+		score += points;
 		if (score > highscore)
 		{
 			highscore = score;
 			OnHighscoreChanged?.Invoke(highscore);
-			highscoreText.text = highscore.ToString();
 			ObjectScaler.Add(highscoreText.transform, 1.2f, 3, () => ObjectScaler.Add(highscoreText.transform.transform, 1f, 3, () => ObjectScaler.Remove(highscoreText.transform)));
 		}
-		scoreText.text = score.ToString();
-		OnScoreChanged?.Invoke(score);
+		OnScoreChanged?.Invoke(points);
 		ObjectScaler.Add(icon.transform, 1.2f, 3, () => ObjectScaler.Add(icon.transform, 1f, 3, () => ObjectScaler.Remove(icon.transform)));
 		ObjectScaler.Add(scoreText.transform, 1.2f, 3, () => ObjectScaler.Add(scoreText.transform.transform, 1f, 3, () => ObjectScaler.Remove(scoreText.transform)));
+		Refresh();
 	}
 
+	public void Refresh()
+	{
+		highscoreText.text = highscore.ToString();
+		scoreText.text = score.ToString();
+	}
 }

@@ -27,7 +27,19 @@ public class SpawnData
 
 public class Spawner : MonoBehaviour
 {
+	public static Dictionary<string, Spawner> Instance = new Dictionary<string, Spawner>();
+	[SerializeField] private string spawnerName;
 	[SerializeField] private SpawnData[] spawners = null;
+
+	private void Awake()
+	{
+		Instance.Add(spawnerName, this);
+	}
+
+	private void OnDestroy()
+	{
+		Instance.Remove(spawnerName);
+	}
 
 	private void Start()
 	{

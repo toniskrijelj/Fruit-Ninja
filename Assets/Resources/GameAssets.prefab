@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 5871297928415149803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -59,3 +59,16 @@ MonoBehaviour:
   splashSound3: {fileID: 8300000, guid: 819f628d16f5818428289284426fad7e, type: 3}
   xBlue: {fileID: 11400000, guid: 252c60f2b99944b4bbe75a5216a0b947, type: 2}
   xRed: {fileID: 11400000, guid: 922dcc14a589b464b915d09a059f87d9, type: 2}
+  comboText: {fileID: 3891254539998189252, guid: b14590fd7cb4a7f41a77cbf5392b2a9c,
+    type: 3}
+  comboFonts:
+  - {fileID: 11400000, guid: 5c4a6ca9589c066468992883efa5c4b4, type: 2}
+  - {fileID: 11400000, guid: 0b87fe4aba94a3e4f81e54a0f31ea48e, type: 2}
+  - {fileID: 11400000, guid: c07dbb624e07df244a0cb52fdb0806ae, type: 2}
+  - {fileID: 11400000, guid: 3a23b594fbd95294fa491aec7f4e5160, type: 2}
+  - {fileID: 11400000, guid: 1c2a5355e856dcf4f969720f145a35e9, type: 2}
+  - {fileID: 11400000, guid: ed00349e0ea16ac46b17a0363eebb57a, type: 2}
+  - {fileID: 11400000, guid: 4d857f00aab994743a6613fce387ce49, type: 2}
+  - {fileID: 11400000, guid: e67e6272c17a6874a99d9758bc994d69, type: 2}
+  criticalText: {fileID: 2129727114828278262, guid: a42344e1c539ce04daa4c4ad75a3c8e5,
+    type: 3}

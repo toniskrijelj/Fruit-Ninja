@@ -25,6 +25,7 @@ public class LivesVisual : MonoBehaviour
 		if (missCount <= 3)
 		{
 			lives[missCount - 1].font = GameAssets.i.xRed;
+			ObjectShaker.Add(lives[missCount - 1].transform, 10, .2f);
 		}
 	}
 }

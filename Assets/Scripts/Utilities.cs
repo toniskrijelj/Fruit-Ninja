@@ -17,6 +17,19 @@ public static class Utilities
 		}
 	}
 
+	private static Canvas mainCanvas;
+	public static Canvas MainCanvas
+	{
+		get
+		{
+			if (mainCanvas == null)
+			{
+				mainCanvas = Object.FindObjectOfType<Canvas>();
+			}
+			return mainCanvas;
+		}
+	}
+
 	public static Vector3 GetWorldPosition(Vector3 screenPosition, float z = 0)
 	{
 		Vector3 position = MainCamera.ScreenToWorldPoint(screenPosition);
@@ -38,25 +51,62 @@ public static class Utilities
 		return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
 	}
 
-	public static void SetParticlesRotation(ParticleSystem particles, float rotation, bool play = true)
+	public static void SetParticlesRotation(ParticleSystem particles, float rotationMin, float rotationMax)
 	{
 		var main = particles.main;
 		var startRotation = main.startRotation;
-		Debug.Log(rotation);
-		startRotation.mode = ParticleSystemCurveMode.Constant;
-		startRotation.constant = rotation;
-		Debug.Log(startRotation.constant);
+		if (rotationMin == rotationMax)
+		{
+			startRotation.mode = ParticleSystemCurveMode.Constant;
+			startRotation.constant = rotationMin;
+		}
+		else
+		{
+			startRotation.mode = ParticleSystemCurveMode.TwoConstants;
+			startRotation.constantMin = rotationMin;
+			startRotation.constantMax = rotationMax;
+		}
 		main.startRotation = startRotation;
-		if (play) particles.Play();
 	}
 
-	public static void SetParticlesColor(ParticleSystem particles, Color color, bool play = true)
+	public static void SetParticlesColor(ParticleSystem particles, Color color)
 	{
 		var main = particles.main;
 		var startColor = main.startColor;
 		startColor.color = color;
 		main.startColor = startColor;
-		if (play) particles.Play();
+	}
+
+	public static void SetParticlesSize(ParticleSystem particles, float sizeMin, float sizeMax)
+	{
+		var main = particles.main;
+		var startSize = main.startSize;
+		if (sizeMin == sizeMax)
+		{
+			startSize.mode = ParticleSystemCurveMode.Constant;
+			startSize.constant = sizeMin;
+		}
+		else
+		{
+			startSize.mode = ParticleSystemCurveMode.TwoConstants;
+			startSize.constantMin = sizeMin;
+			startSize.constantMax = sizeMax;
+		}
+		main.startSize = startSize;
+	}
+
+	public static void SetParticleCircleShape(ParticleSystem particles, float radius, float radiusThickness)
+	{
+		var shape = particles.shape;
+		shape.radius = radius;
+		shape.radiusThickness = radiusThickness;
+	}
+
+	public static void SetParticlesEmissionBurst(ParticleSystem particles, float time, short count, short cycles, float interval)
+	{
+		var emission = particles.emission;
+		emission.burstCount = 1;
+		emission.SetBurst(0, new ParticleSystem.Burst(time, count, count, cycles, interval));
 	}
 
 	public static float SignClamp(float value, float sign, float min, float max)

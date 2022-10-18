@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class SimpleRotate : MonoBehaviour
 {
-	[SerializeField] private float speedMin = 360;
-	[SerializeField] private float speedMax = 360;
+	[Header("X")]
+	[SerializeField] private float speedXMin = 0;
+	[SerializeField] private float speedXMax = 0;
+	[Header("Y")]
+	[SerializeField] private float speedYMin = 0;
+	[SerializeField] private float speedYMax = 0;
+	[Header("Z")]
+	[SerializeField] private float speedZMin = 0;
+	[SerializeField] private float speedZMax = 0;
 
-	private float speed;
+	private Vector3 speed;
 
 	private void Awake()
 	{
-		speed = Random.Range(speedMin, speedMax);
+		speed = new Vector3(Random.Range(speedXMin, speedXMax), Random.Range(speedYMin, speedYMax), Random.Range(speedZMin, speedZMax));
 	}
 
 	void Update()
     {
-		transform.Rotate(0, 0, speed * Time.deltaTime);
+		transform.Rotate(speed * Time.deltaTime);
     }
 }

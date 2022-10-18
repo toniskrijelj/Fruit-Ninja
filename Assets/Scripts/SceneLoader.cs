@@ -5,6 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+	public static SceneLoader Instance;
+
+	private void Awake()
+	{
+		Instance = this;
+	}
+
 	public void LoadScene(int index)
 	{
 		var sceneLoading = SceneManager.LoadSceneAsync(index);
@@ -14,5 +21,10 @@ public class SceneLoader : MonoBehaviour
 	public void LoadScene(string scene)
 	{
 		var sceneLoading = SceneManager.LoadSceneAsync(scene);
+	}
+
+	public void Quit()
+	{
+		Application.Quit();
 	}
 }
